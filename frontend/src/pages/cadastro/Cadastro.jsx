@@ -41,18 +41,18 @@ export const Cadastro = () => {
     profissao: 'empregado' 
   });
 
-  const navigate = useNavigate();
-  const [errors, setErrors] = useState({});
+  const navigate = useNavigate()
+  const [errors, setErrors] = useState({})
 
 
   const handleInput = (event) => {
     const { name, value } = event.target;
     if (name === 'cpf' || name === 'idade' || name === 'telefone') {
       if (value === '' || /^[0-9\b]+$/.test(value)) {
-        setValues(prev => ({ ...prev, [name]: value }));
+        setValues(prev => ({ ...prev, [name]: value }))
       }
     } else {
-      setValues(prev => ({ ...prev, [name]: value }));
+      setValues(prev => ({ ...prev, [name]: value }))
     }
   };
 
@@ -62,15 +62,15 @@ export const Cadastro = () => {
   };
 
   const handleCepChange = async (event) => {
-    const { value } = event.target;
-    const formattedCep = codeCep(value);
-    setValues(prev => ({ ...prev, cep: formattedCep }));
+    const { value } = event.target
+    const formattedCep = codeCep(value)
+    setValues(prev => ({ ...prev, cep: formattedCep }))
 
-    const cleanCep = formattedCep.replace(/\D/g, '');
+    const cleanCep = formattedCep.replace(/\D/g, '')
     if (cleanCep.length === 8) {
       try {
-        const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
-        const data = await response.json();
+        const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`)
+        const data = await response.json()
         if (!data.erro) {
           setValues(prev => ({
             ...prev,
@@ -89,31 +89,31 @@ export const Cadastro = () => {
           }));
         }
       } catch (error) {
-        console.error('Erro ao buscar CEP:', error);
+        console.error('Erro ao buscar CEP:', error)
       }
     }
   };
 
   const codeCep = (value) => {
-    if (!value) return '';
-    value = value.replace(/\D/g, '');
-    value = value.replace(/(\d{5})(\d)/, '$1-$2');
-    return value;
-  };
+    if (!value) return ''
+    value = value.replace(/\D/g, '')
+    value = value.replace(/(\d{5})(\d)/, '$1-$2')
+    return value
+  }
 
   const foneEvent = (event) => {
     const { value } = event.target;
     const formattedPhone = codeFone(value);
-    setValues(prev => ({ ...prev, telefone: formattedPhone }));
-  };
+    setValues(prev => ({ ...prev, telefone: formattedPhone }))
+  }
 
   const codeFone = (value) => {
     if (!value) return '';
     value = value.replace(/\D/g, '');
-    value = value.replace(/(\d{2})(\d)/, "($1) $2");
-    value = value.replace(/(\d)(\d{4})$/, "$1-$2");
+    value = value.replace(/(\d{2})(\d)/, "($1) $2")
+    value = value.replace(/(\d)(\d{4})$/, "$1-$2")
     return value;
-  };
+  }
 
   const handleCpfVerificar = () => {
     const { cpf } = values;
@@ -121,12 +121,12 @@ export const Cadastro = () => {
       axios.post('http://localhost:8081/pages/verificar-cpf', { cpf })
         .then(res => {
           if (res.data.existe) {
-            setErrors(prev => ({ ...prev, cpf: 'CPF já cadastrado' }));
+            setErrors(prev => ({ ...prev, cpf: 'CPF já cadastrado' }))
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
     }
-  };
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -142,24 +142,24 @@ export const Cadastro = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
        
-        const res = await axios.post('http://localhost:8081/pages/cadastro', { data: encryptedData, key: secretKey });
+        const res = await axios.post('http://localhost:8081/pages/cadastro', { data: encryptedData, key: secretKey })
         console.log(res)
 
-        await generatePdf();
+        await generatePdf()
 
-        navigate('/');
-        // const res = await axios.post('http://localhost:8081/pages/cadastro', values);
-        // console.log(res);
+        navigate('/')
+        // const res = await axios.post('http://localhost:8081/pages/cadastro', values)
+        // console.log(res)
 
         
-        // await generatePdf();
+        // await generatePdf()
 
-        // navigate('/');
+        // navigate('/')
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
     }
-  };
+  }
 
 
   // const generatePdf = async () => {
@@ -206,31 +206,31 @@ export const Cadastro = () => {
 
 
   const generatePdf = async () => {
-    const pdfContainer = document.createElement('div');
-    pdfContainer.style.position = 'absolute';
-    pdfContainer.style.top = '-9999px';
-    pdfContainer.style.left = '-9999px';
-    document.body.appendChild(pdfContainer);
+    const pdfContainer = document.createElement('div')
+    pdfContainer.style.position = 'absolute'
+    pdfContainer.style.top = '-9999px'
+    pdfContainer.style.left = '-9999px'
+    document.body.appendChild(pdfContainer)
 
-    const root = createRoot(pdfContainer);
-    root.render(<CadastroPdf data={values} />);
+    const root = createRoot(pdfContainer)
+    root.render(<CadastroPdf data={values} />)
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const canvas = await html2canvas(pdfContainer, { scale: 2 });
-    const imgData = canvas.toDataURL('image/png');
+    const canvas = await html2canvas(pdfContainer, { scale: 2 })
+    const imgData = canvas.toDataURL('image/png')
 
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4'
-    });
+    })
 
-    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
-    pdf.save('cadastro.pdf');
+    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297)
+    pdf.save('cadastro.pdf')
 
-    root.unmount(); 
-    document.body.removeChild(pdfContainer); 
-  };
+    root.unmount() 
+    document.body.removeChild(pdfContainer)
+  }
 
 
   
