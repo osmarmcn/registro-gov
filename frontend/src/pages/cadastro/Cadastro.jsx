@@ -8,6 +8,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CadastroValidar } from './CadastroValidar';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import CryptoJS from 'crypto-js';
+import { v4 as uuidv4 } from 'uuid';
 
 
 import axios from 'axios';
@@ -126,22 +128,33 @@ export const Cadastro = () => {
     }
   };
 
-
-
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const validationErrors = CadastroValidar(values);
-    setErrors(validationErrors);
+    event.preventDefault()
+
+    const secretKey = uuidv4()
+
+    // Criptografar dados
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(values), secretKey).toString()
+
+    const validationErrors = CadastroValidar(values)
+    setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const res = await axios.post('http://localhost:8081/pages/cadastro', values);
-        console.log(res);
+       
+        const res = await axios.post('http://localhost:8081/pages/cadastro', { data: encryptedData, key: secretKey });
+        console.log(res)
 
-        
         await generatePdf();
 
         navigate('/');
+        // const res = await axios.post('http://localhost:8081/pages/cadastro', values);
+        // console.log(res);
+
+        
+        // await generatePdf();
+
+        // navigate('/');
       } catch (err) {
         console.log(err);
       }

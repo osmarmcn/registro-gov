@@ -30,6 +30,8 @@
 
     "axios": "^1.7.2",
 
+    "crypto-js": "^4.2.0",
+
     "html2canvas": "^1.4.1",
 
     "http-proxy-middleware": "^3.0.0",
@@ -40,7 +42,9 @@
 
     "react-dom": "^18.2.0",
 
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+
+    "uuid": "^9.0.1"
 
   },
 

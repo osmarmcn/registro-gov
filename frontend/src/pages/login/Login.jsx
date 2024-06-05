@@ -5,6 +5,7 @@ import { Link, useNavigate, } from 'react-router-dom'
 import { LoginValidar } from './LoginValidar'
 import axios from 'axios'
 
+
 export const Login = () => {
     const [values, setValues] = useState({
         cpf: '',
@@ -27,36 +28,59 @@ export const Login = () => {
     }
 
     const handleSubmit = (event) => {
-        event.preventDefault()
-        console.log('Valores submetidos:', values)
-        const LoginErrors = LoginValidar(values)
-        setErrors(LoginErrors)
-
-        axios.post('http://localhost:8081/pages/login', values)
+        event.preventDefault();
+    
+        console.log('Valores submetidos:', values);
+        const LoginErrors = LoginValidar(values);
+        setErrors(LoginErrors);
+    
+        const loginData = {
+            cpf: values.cpf,
+            senha: values.senha
+        };
+    
+        axios.post('http://localhost:8081/pages/login', loginData)
             .then(res => {
-                console.log('Resposta do servidor:', res.data)
+                console.log('Resposta do servidor:', res.data);
                 if (res.data === 'sucesso') {
-                    localStorage.setItem('authToken', 'someAuthToken')
-                    navigate('/dashboard')
+                    localStorage.setItem('authToken', 'someAuthToken');
+                    navigate('/dashboard');
                 } else {
-                    alert('Erro ao logar')
+                    alert('Erro ao logar');
                 }
             })
-            .catch(err => console.log(err))
-
-        // if (Object.keys(LoginErrors).length === 0) {
-        //     axios.post('http://localhost:8081/pages/login', values)
-        //         .then(res => {
-        //             console.log('Resposta do servidor:', res.data)
-        //             if (res.data === 'sucesso') {
-        //                 navigate('/dashboard')
-        //             } else {
-        //                 alert('Erro ao logar')
-        //             }
-        //         })
-        //         .catch(err => console.log(err))
-        // }
+            .catch(err => console.log(err));
     }
+
+    // const handleSubmit = (event) => {
+    //     event.preventDefault()
+
+    //     const secretKey = 'your-secret-key'; // Use a mesma chave secreta usada para criptografar os dados durante o cadastro
+    //     const encryptedCpf = CryptoJS.AES.encrypt(values.cpf, secretKey).toString()
+    //     const encryptedSenha = CryptoJS.AES.encrypt(values.senha, secretKey).toString()
+
+    //     console.log('Valores submetidos:', values)
+    //     const LoginErrors = LoginValidar(values)
+    //     setErrors(LoginErrors)
+
+    //     const loginData = {
+    //         cpf: encryptedCpf,
+    //         senha: encryptedSenha
+    //     };
+
+    //     axios.post('http://localhost:8081/pages/login', loginData)
+    //         .then(res => {
+    //             console.log('Resposta do servidor:', res.data)
+    //             if (res.data === 'sucesso') {
+    //                 localStorage.setItem('authToken', 'someAuthToken')
+    //                 navigate('/dashboard')
+    //             } else {
+    //                 alert('Erro ao logar')
+    //             }
+    //         })
+    //         .catch(err => console.log(err))
+
+    // }
 
 
   return (
