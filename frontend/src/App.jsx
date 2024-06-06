@@ -17,8 +17,8 @@ function App() {
           <Route path="/cadastro" element={<Cadastro/>}/>
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
-          {/* <Route path="/dashboard" element={<Dashboard/>}/> */}
+          </Route>
+         
       </Routes>
     </BrowserRouter>
   )
