@@ -19,14 +19,14 @@ Este projeto é um aplicativo web baseado em React, que pode ser utlilizado da f
 git clone https://github.com/osmarmcn/registro-gov.git
 ```
 
-2. Navigate to the project directory:
+2. Navigate to the project directory :
 
 ```
 cd backend
 cd frontend
 ```
 
-3. Install the dependencies:
+3. Install the dependencies no diretório backend quanto no frontend:
 
 ```
 npm install
@@ -36,7 +36,7 @@ npm install
 4. Run the development server:
 
 ```
-ng serve --open
+npm start
 ```
 
 ## 🛠️ Project Structure
