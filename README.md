@@ -4,39 +4,44 @@
 
 ## 🚀 Overview 
 
-This project is a React-based web application that provides a seamless and visually appealing interface for users to navigate through different sections of a virtual journey website. The sections include Hero, About, Product, and Contact, each offering unique content and functionality.
+Este projeto é um aplicativo web baseado em React, que pode ser utilizado no formato mobile ou desktop. Fornece uma interface de login que é visualmente atraente para os usuários cadastrarem suas informações e sua situação socioeconômica. Além disso, incluem login, cadastro e painel de controle cada uma oferecendo conteúdo e funcionalidades diferentes.
 
 ## 📋 Requirements
 
-- Node.js (v12 or later)
-- npm (v6 or later) or yarn (v1 or later)
+- Node.js (v12 ou posterior)
+- npm (v6 ou posterior) ou fio (v1 ou posterior)
 
 ## 🔧 Installation
 
-1. Clone the repository:
+1. Clone o repositório:
 
 ```
 git clone https://github.com/osmarmcn/registro-gov.git
 ```
-
-2. Navigate to the project directory:
+Navegue até os diretórios do projeto:
 
 ```
 cd backend
 cd frontend
 ```
 
-3. Install the dependencies:
+3. Instale as dependências no diretório backend e no frontend:
 
 ```
 npm install
 
 ```
 
-4. Run the development server:
+4. Execute o servidor de desenvolvimento no diretório backend:
 
 ```
 ng serve --open
+```
+
+5. Execute o projeto no diretório frotend:
+
+```
+npm run dev:mobile
 ```
 
 ## 🛠️ Project Structure

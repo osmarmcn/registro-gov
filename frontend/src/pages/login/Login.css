@@ -14,7 +14,7 @@ body{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /* background: darkgray; */
+    background:rgba(0, 0, 0, 0.944); 
 
 }
 
