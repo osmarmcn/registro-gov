@@ -38,8 +38,9 @@ export const Login = () => {
             cpf: values.cpf,
             senha: values.senha
         };
+       
     
-        axios.post('http://localhost:8081/pages/login', loginData)
+        axios.post(' http://192.168.18.22:8081/pages/login', loginData)
             .then(res => {
                 console.log('Resposta do servidor:', res.data);
                 if (res.data === 'sucesso') {

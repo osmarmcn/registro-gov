@@ -57,10 +57,11 @@ body{
 
     font-size: 1.6rem;
     padding-bottom: .1rem;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #fff;
     text-align: center;
     letter-spacing: 0.1em;
     margin: 2.6rem 0;
+    color: #fff;
 
 
 }
@@ -95,6 +96,7 @@ body{
     font-size: 16px;
     font-weight: bold;
     margin-bottom: .2rem;
+    color: #fff;
 }
 
 .container form .formbox fieldset{
