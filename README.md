@@ -4,7 +4,7 @@
 
 ## 🚀 Overview 
 
-This project is a React-based web application that provides a seamless and visually appealing interface for users to navigate through different sections of a virtual journey website. The sections include Hero, About, Product, and Contact, each offering unique content and functionality.
+Este projeto é um aplicativo web baseado em React, que pode ser utlilizado da forma mobile ou desktop. Fornece uma interface de login que é visualmente atraente para os usuários cadastrarem suas informações e sua situação socioeconômica. As seções incluem login, cadastro e dashboard cada uma oferecendo conteúdo e funcionalidade diferentes.
 
 ## 📋 Requirements
 
