@@ -33,7 +33,7 @@ npm install
 
 ```
 
-4. Run the development server:
+4. Run the development server no diretório backend :
 
 ```
 npm start
