@@ -57,7 +57,7 @@ registro.sql
 
 ## 🛠️  Estrutura do Projeto
 
-- Login.jsx: A página login, em que está a interface do projeto vai direcionar as outras páginas, para qual for conformidade necessária que deseja o usuário.Uma interface atrativa com uma imagem indicando para que se designa. Inclui  botões para navegar até as seções desejada. 
+- Login.jsx: A página login, em que está a interface do projeto vai direcionar as outras páginas, para qual for conformidade necessária que deseja o usuário.Uma interface atrativa com uma imagem  para que se designa o projeto. Inclui  botões para navegar até as seções desejada. 
 - Cadastro.jsx: A página cadastro, é onde será feita a coleta e verficação dos dados do usuário, caso sejam validos e existente no sistema. Uma tela facil e intuitiva para seu preenchimento, ao final gera um pdf com suas informações.
 - Dashboard.jsx: A página que o usuário interage com aplicativo.
 
