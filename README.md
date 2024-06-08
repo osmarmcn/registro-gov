@@ -4,7 +4,9 @@
 
 ## 🚀 Overview 
 
+
 Este projeto é um aplicativo web baseado em React, que pode ser utilizado no formato mobile ou desktop. Fornece uma interface de login que é visualmente atraente para os usuários cadastrarem suas informações e sua situação socioeconômica. Além disso, incluem login, cadastro e painel de controle cada uma oferecendo conteúdo e funcionalidades diferentes.
+
 
 ## 📋 Requirements
 
@@ -18,12 +20,14 @@ Este projeto é um aplicativo web baseado em React, que pode ser utilizado no fo
 ```
 git clone https://github.com/osmarmcn/registro-gov.git
 ```
-Navegue até os diretórios do projeto:
+
+2. Navegue até os diretórios do projeto:
 
 ```
 cd backend
 cd frontend
 ```
+
 
 3. Instale as dependências no diretório backend e no frontend:
 
@@ -32,10 +36,11 @@ npm install
 
 ```
 
+
 4. Execute o servidor de desenvolvimento no diretório backend:
 
 ```
-ng serve --open
+npm start
 ```
 
 5. Execute o projeto no diretório frotend:
