@@ -142,7 +142,7 @@ export const Cadastro = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
        
-        const res = await axios.post('http://192.168.18.22:8081/pages/cadastro', { data: encryptedData, key: secretKey })
+        const res = await axios.post('http://localhost:8081/pages/cadastro', { data: encryptedData, key: secretKey })
         console.log(res)
 
         await generatePdf()
@@ -242,25 +242,25 @@ export const Cadastro = () => {
 
         <div className="formbox">
           <label htmlFor="nome">Nome</label>
-          <input type="text" placeholder="digite seu nome" name="nome" id="nome" value={values.nome} onChange={handleInput}  autoComplete="off"/>
+          <input type="text" placeholder="digite seu nome" name="nome" id="nome" value={values.nome} onChange={handleInput} />
           {errors.nome && <span className='res'>{errors.nome}</span>}
         </div>
 
         <div className="formbox">
           <label htmlFor="email">Email</label>
-          <input type="email" placeholder="digite seu email" name="email" id="email" value={values.email} onChange={handleInput}  autoComplete="off"/>
+          <input type="email" placeholder="digite seu email" name="email" id="email" value={values.email} onChange={handleInput} />
           {errors.email && <span className='res'>{errors.email}</span>}
         </div>
 
         <div className="formbox">
           <label htmlFor="idade">Idade</label>
-          <input type="text" placeholder="digite sua idade" name="idade" maxLength='3' value={values.idade} onChange={handleInput} id="idade"  autoComplete="off"/>
+          <input type="text" placeholder="digite sua idade" name="idade" maxLength='3' value={values.idade} onChange={handleInput} id="idade" />
           {errors.idade && <span className='res'>{errors.idade}</span>}
         </div>
 
         <div className="formbox">
           <label htmlFor="cpf">CPF</label>
-          <input type="text" placeholder="digite seu cpf" name="cpf" maxLength="11" value={values.cpf} onChange={handleInput} onBlur={handleCpfVerificar} id="cpf"  autoComplete="off"/>
+          <input type="text" placeholder="digite seu cpf" name="cpf" maxLength="11" value={values.cpf} onChange={handleInput} onBlur={handleCpfVerificar} id="cpf" />
           {errors.cpf && <span className='res'>{errors.cpf}</span>}
         </div>
 
@@ -297,7 +297,7 @@ export const Cadastro = () => {
 
         <div className="formbox">
           <label htmlFor="telefone">Telefone</label>
-          <input type="text" placeholder="digite seu telefone" name="telefone" maxLength="15" value={values.telefone} onChange={foneEvent} id="telefone"  autoComplete="off"/>
+          <input type="text" placeholder="digite seu telefone" name="telefone" maxLength="15" value={values.telefone} onChange={foneEvent} id="telefone" />
           {errors.telefone && <span className='res'>{errors.telefone}</span>}
         </div>
 
