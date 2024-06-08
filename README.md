@@ -49,14 +49,19 @@ npm start
 npm run dev:mobile
 ```
 
-## 🛠️ Project Structure
+6. Baixe a copia do script sql, que está no porjeto, para utilizar no Myslq workbench:
 
-- Page.tsx: The main page component that manages the state of the current section and renders the corresponding components (Hero, About, Product, Contact) with transitions.
-- components/Hero.tsx: The Hero section, featuring a welcoming interface with a background image and an embedded Spline design. It includes a button to navigate to the About section.
-- components/About.tsx: The About section, providing information about the project or service. It includes buttons to navigate to the Hero and Product sections.
-- components/Product.tsx: The Product section, showcasing the main products or services. It includes navigation to other sections.
-- components/Contact.tsx: The Contact section, offering contact information or a form for users to reach out.
+```
+registro.sql
+```
 
-## 📄 License
+## 🛠️  Estrutura do Projeto
 
-- This project is licensed under the [MIT License](LICENSE).
+- Login.jsx: A página login, em que está a interface do projeto vai direcionar as outras páginas, para qual for conformidade necessária que deseja o usuário.Uma interface atrativa com uma imagem indicando para que se designa. Inclui  botões para navegar até as seções desejada. 
+- Cadastro.jsx: A página cadastro, é onde será feita a coleta e verficação dos dados do usuário, caso sejam validos e existente no sistema. Uma tela facil e intuitiva para seu preenchimento, ao final gera um pdf com suas informações.
+- Dashboard.jsx: A página que o usuário interage com aplicativo.
+
+
+## 📄 Licença
+
+- Este projeto está licenciado sob a [MIT License](LICENSE).
