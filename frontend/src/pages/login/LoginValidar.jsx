@@ -21,37 +21,3 @@ export const LoginValidar = (values) => {
 }
 
 
-// export const LoginValidar = (values) => {
-//     let error = {}
-
-//     const email_val = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-//     const senha_val = /^(?=.*\d)(?=.*[a-z])(?=.*)[0-9a-zA-Z$*&@#]{8,}$/
-
-//     if(values.email === ''){
-//         error.email = 'Campo obrigatório'
-//     }
-        
-//     else if(!email_val.test(values.email)){
-//             error.email = 'Campo obrigatório'
-        
-//     }else{
-//         error.email = ''
-        
-//     }
-
-//     if(values.senha === ''){
-//             error.senha = 'Campo obrigatório'
-//     }
-        
-//     else if(!senha_val.test(values.senha)){
-//         error.senha = 'Campo obrigatório'
-        
-//     }else{
-//         error.senha = ''
-//     }
-        
-//     return error
-
-
-    
-// }

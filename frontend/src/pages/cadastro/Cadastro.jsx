@@ -44,7 +44,7 @@ export const Cadastro = () => {
   const navigate = useNavigate()
   const [errors, setErrors] = useState({})
 
-
+// verificar cpf, idade, telefone
   const handleInput = (event) => {
     const { name, value } = event.target;
     if (name === 'cpf' || name === 'idade' || name === 'telefone') {
@@ -56,11 +56,13 @@ export const Cadastro = () => {
     }
   };
 
+  // capturar os valores dos inputs
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues(prev => ({ ...prev, [name]: value }));
   };
 
+  // mascara para o cep  validez do cep
   const handleCepChange = async (event) => {
     const { value } = event.target
     const formattedCep = codeCep(value)
@@ -94,6 +96,7 @@ export const Cadastro = () => {
     }
   };
 
+  // mascara para o cep 
   const codeCep = (value) => {
     if (!value) return ''
     value = value.replace(/\D/g, '')
@@ -101,6 +104,7 @@ export const Cadastro = () => {
     return value
   }
 
+  // mascara para o telefone
   const foneEvent = (event) => {
     const { value } = event.target;
     const formattedPhone = codeFone(value);
@@ -115,6 +119,7 @@ export const Cadastro = () => {
     return value;
   }
 
+  // verificar se o cpf ja esta cadastrado no banco
   const handleCpfVerificar = () => {
     const { cpf } = values;
     if (cpf.length === 11) {
@@ -122,15 +127,18 @@ export const Cadastro = () => {
         .then(res => {
           if (res.data.existe) {
             setErrors(prev => ({ ...prev, cpf: 'CPF já cadastrado' }))
+            navigate('/')
           }
         })
         .catch(err => console.log(err))
     }
   }
 
+  // envio dos dados
   const handleSubmit = async (event) => {
     event.preventDefault()
 
+    // criar chave
     const secretKey = uuidv4()
 
     // Criptografar dados
@@ -148,13 +156,6 @@ export const Cadastro = () => {
         await generatePdf()
 
         navigate('/')
-        // const res = await axios.post('http://localhost:8081/pages/cadastro', values)
-        // console.log(res)
-
-        
-        // await generatePdf()
-
-        // navigate('/')
       } catch (err) {
         console.log(err)
       }
@@ -162,49 +163,8 @@ export const Cadastro = () => {
   }
 
 
-  // const generatePdf = async () => {
-  //   const pdfContainer = document.createElement('div');
-  //   pdfContainer.style.position = 'absolute';
-  //   pdfContainer.style.top = '-9999px';
-  //   pdfContainer.style.left = '-9999px';
-  //   pdfContainer.style.width = '210mm';
-  //   pdfContainer.style.minHeight = 'auto';
-  //   document.body.appendChild(pdfContainer);
-
-  //   const root = createRoot(pdfContainer);
-  //   root.render(<CadastroPdf data={values} />);
-
-  //   await new Promise(resolve => setTimeout(resolve, 1000)); // Espera para garantir a renderização
-
-  //   const pdf = new jsPDF('p', 'mm', 'a4');
-  //   const pageHeight = pdf.internal.pageSize.getHeight();
-  //   const pageWidth = pdf.internal.pageSize.getWidth();
-
-  //   const canvas = await html2canvas(pdfContainer, { scale: 2 });
-  //   const imgData = canvas.toDataURL('image/png');
-  //   const imgWidth = pageWidth;
-  //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  //   let heightLeft = imgHeight;
-  //   let position = 0;
-
-  //   pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  //   heightLeft -= pageHeight;
-
-  //   while (heightLeft > 0) {
-  //     position = heightLeft - imgHeight;
-  //     pdf.addPage();
-  //     pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  //     heightLeft -= pageHeight;
-  //   }
-
-  //   pdf.save('cadastro.pdf');
-
-  //   root.unmount(); // Desmonta o componente do React
-  //   document.body.removeChild(pdfContainer); // Remove o container do DOM após a captura
-  // };
-
-
+ 
+// gera um pdf quando envia os dados
   const generatePdf = async () => {
     const pdfContainer = document.createElement('div')
     pdfContainer.style.position = 'absolute'
