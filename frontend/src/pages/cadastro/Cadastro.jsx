@@ -1,6 +1,6 @@
 
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import './Cadastro.css';
@@ -44,17 +44,25 @@ export const Cadastro = () => {
   const navigate = useNavigate()
   const [errors, setErrors] = useState({})
 
+  useEffect(() => {
+    const savedValues = JSON.parse(localStorage.getItem('formData'))
+    if (savedValues) {
+      setValues(savedValues)
+    }
+  }, [])
+
 // verificar cpf, idade, telefone
-  const handleInput = (event) => {
-    const { name, value } = event.target;
-    if (name === 'cpf' || name === 'idade' || name === 'telefone') {
-      if (value === '' || /^[0-9\b]+$/.test(value)) {
-        setValues(prev => ({ ...prev, [name]: value }))
-      }
-    } else {
+const handleInput = (event) => {
+  const { name, value } = event.target
+  if (name === 'cpf' || name === 'idade' || name === 'telefone') {
+    if (value === '' || /^[0-9\b]+$/.test(value)) {
       setValues(prev => ({ ...prev, [name]: value }))
     }
-  };
+  } else {
+    setValues(prev => ({ ...prev, [name]: value }))
+  }
+  localStorage.setItem('formData', JSON.stringify({ ...values, [name]: value }))
+}
 
   // capturar os valores dos inputs
   const handleChange = (event) => {
@@ -134,28 +142,53 @@ export const Cadastro = () => {
     }
   }
 
-  // envio dos dados
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  // Sincronizar dados com o servidor quando online
+useEffect(() => {
+  const syncData = async () => {
+    const savedValues = JSON.parse(localStorage.getItem('formData'))
+    if (navigator.onLine && savedValues) {
+      const secretKey = uuidv4()
+      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(savedValues), secretKey).toString()
 
-    // criar chave
-    const secretKey = uuidv4()
-
-    // Criptografar dados
-    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(values), secretKey).toString()
-
-    const validationErrors = CadastroValidar(values)
-    setErrors(validationErrors)
-
-    if (Object.keys(validationErrors).length === 0) {
       try {
-       
         const res = await axios.post('http://192.168.18.22:8081/pages/cadastro', { data: encryptedData, key: secretKey })
         console.log(res)
 
-        await generatePdf()
+        // Após sincronização bem-sucedida, remover dados do armazenamento local
+        localStorage.removeItem('formData')
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 
-        navigate('/')
+  window.addEventListener('online', syncData)
+  return () => window.removeEventListener('online', syncData)
+}, [])
+
+
+  // envio dos dados
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+  
+    const secretKey = uuidv4()
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(values), secretKey).toString()
+  
+    const validationErrors = CadastroValidar(values)
+    setErrors(validationErrors)
+  
+    if (Object.keys(validationErrors).length === 0) {
+      try {
+        if (navigator.onLine) {
+          const res = await axios.post('http://192.168.18.22:8081/pages/cadastro', { data: encryptedData, key: secretKey })
+          console.log(res);
+  
+          await generatePdf()
+          navigate('/')
+        } else {
+          localStorage.setItem('formData', JSON.stringify(values))
+          alert('Você está offline. Os dados serão enviados quando a conexão for restabelecida.')
+        }
       } catch (err) {
         console.log(err)
       }
