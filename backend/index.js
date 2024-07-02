@@ -88,35 +88,63 @@ app.post('/pages/login', (req, res) => {
 
 // Verificar se o CPF já está cadastrado
 app.post('/pages/verificar-cpf', (req, res) => {
-    const { cpf } = req.body
-    const sql = "SELECT dadosCriptografados, chaveCriptografia FROM registros"
+    const { cpf } = req.body;
+    const sql = "SELECT dadosCriptografados, chaveCriptografia FROM registros";
 
     db.query(sql, (err, data) => {
         if (err) {
             console.error(err);
-            return res.status(500).json({ error: 'Erro ao verificar CPF' })
+            return res.status(500).json({ error: 'Erro ao verificar CPF' });
         }
 
-        let cpfEncontrado = false
+        let cpfEncontrado = false;
 
         for (let i = 0; i < data.length; i++) {
-            const secretKey = data[i].chaveCriptografia
-            const decryptedData = decryptData(data[i].dadosCriptografados, secretKey)
+            const secretKey = data[i].chaveCriptografia;
+            const decryptedData = decryptData(data[i].dadosCriptografados, secretKey);
 
             // Adicionar log para verificar os dados descriptografados
-            console.log('Decrypted Data:', decryptedData)
+            console.log('Decrypted Data:', decryptedData);
 
             if (decryptedData && decryptedData.cpf === cpf) {
                 cpfEncontrado = true;
-                return res.status(200).json({ existe: true })
+                return res.status(200).json({ existe: true });
             }
         }
 
         if (!cpfEncontrado) {
-            return res.status(200).json({ existe: false })
+            return res.status(200).json({ existe: false });
         }
     });
 });
+// app.post('/pages/verificar-cpf', (req, res) => {
+//     const { cpf } = req.body;
+//     const sql = "SELECT dadosCriptografados, chaveCriptografia FROM registros WHERE dadosCriptografados LIKE ?";
+
+//     // Usando '%' + cpf + '%' para encontrar o CPF dentro do campo criptografado
+//     db.query(sql, [`%${cpf}%`], (err, data) => {
+//         if (err) {
+//             console.error(err);
+//             return res.status(500).json({ error: 'Erro ao verificar CPF' });
+//         }
+
+//         let cpfEncontrado = false;
+
+//         for (let i = 0; i < data.length; i++) {
+//             const secretKey = data[i].chaveCriptografia;
+//             const decryptedData = decryptData(data[i].dadosCriptografados, secretKey);
+
+//             if (decryptedData && decryptedData.cpf === cpf) {
+//                 cpfEncontrado = true;
+//                 return res.status(200).json({ existe: true });
+//             }
+//         }
+
+//         if (!cpfEncontrado) {
+//             return res.status(200).json({ existe: false });
+//         }
+//     });
+// });
 
 app.listen(8081, () => {
     console.log('funcionando')

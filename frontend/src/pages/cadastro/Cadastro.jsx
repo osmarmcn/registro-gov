@@ -43,6 +43,8 @@ export const Cadastro = () => {
 
   const navigate = useNavigate()
   const [errors, setErrors] = useState({})
+  const [cpfJaCadastrado, setCpfJaCadastrado] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const savedValues = JSON.parse(localStorage.getItem('formData'))
@@ -128,19 +130,62 @@ const handleInput = (event) => {
   }
 
   // verificar se o cpf ja esta cadastrado no banco
-  const handleCpfVerificar = () => {
+  const handleCpfVerificar = async () => {
     const { cpf } = values;
+
     if (cpf.length === 11) {
-      axios.post('http://localhost:8081/pages/verificar-cpf', { cpf })
-        .then(res => {
-          if (res.data.existe) {
-            setErrors(prev => ({ ...prev, cpf: 'CPF já cadastrado' }))
-            navigate('/')
-          }
-        })
-        .catch(err => console.log(err))
+      setLoading(true);
+      try {
+        const res = await axios.post('http://localhost:8081/pages/verificar-cpf', { cpf });
+        if (res.data.existe) {
+          setErrors(prev => ({ ...prev, cpf: 'CPF já cadastrado' }));
+          setCpfJaCadastrado(true);
+
+          // Exibir mensagem e redirecionar para a página de login após 3 segundos
+          setTimeout(() => {
+            navigate('/');
+          }, 3000);
+        } else {
+          setCpfJaCadastrado(false);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
     }
-  }
+  };
+
+  useEffect(() => {
+    // Limpar todos os campos do formulário ao montar o componente
+    setValues({
+      nome: '',
+      email: '',
+      idade: '',
+      cpf: '',
+      cep: '',
+      telefone: '',
+      endereco: '',
+      bairro: '',
+      cidade: '',
+      estado: '',
+      numero: '',
+      senha: '',
+      confirmarsenha: '',
+      sexo: 'homem',
+      estadoCivil: 'solteiro',
+      rendaFamiliar: 'Até 02 salários mínimos', 
+      pessoasEmCasa: 'moro sozinho', 
+      escolaridade: 'ensino fundamental completo',
+      despesasMensais: 'gastos até R$ 500,00', 
+      raca: 'branca', 
+      filhos: 'nenhum', 
+      profissao: 'empregado'
+    });
+    setErrors({});
+    setCpfJaCadastrado(false);
+    setLoading(false);
+  }, []);
 
   // Sincronizar dados com o servidor quando online
 useEffect(() => {
@@ -169,33 +214,37 @@ useEffect(() => {
 
   // envio dos dados
   const handleSubmit = async (event) => {
-    event.preventDefault()
-  
-    const secretKey = uuidv4()
-    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(values), secretKey).toString()
-  
-    const validationErrors = CadastroValidar(values)
-    setErrors(validationErrors)
-  
-    if (Object.keys(validationErrors).length === 0) {
+    event.preventDefault();
+
+    const secretKey = uuidv4();
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(values), secretKey).toString();
+
+    const validationErrors = CadastroValidar(values);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0 && !cpfJaCadastrado) {
       try {
         if (navigator.onLine) {
-          const res = await axios.post('http://192.168.18.22:8081/pages/cadastro', { data: encryptedData, key: secretKey })
+          const res = await axios.post('http://192.168.18.22:8081/pages/cadastro', { data: encryptedData, key: secretKey });
           console.log(res);
-  
-          await generatePdf()
-          navigate('/')
+
+          await generatePdf();  // Chamada para gerar o PDF após a conclusão do cadastro
+
+          navigate('/');
         } else {
-          localStorage.setItem('formData', JSON.stringify(values))
-          alert('Você está offline. Os dados serão enviados quando a conexão for restabelecida.')
+          localStorage.setItem('formData', JSON.stringify(values));
+          alert('Você está offline. Os dados serão enviados quando a conexão for restabelecida.');
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
+    } else if (cpfJaCadastrado) {
+      alert('O CPF já está cadastrado. Redirecionando para login...');
+      setTimeout(() => {
+        navigate('/');
+      }, 3000);
     }
-  }
-
-
+  };
  
 // gera um pdf quando envia os dados
   const generatePdf = async () => {
@@ -254,7 +303,7 @@ useEffect(() => {
         <div className="formbox">
           <label htmlFor="cpf">CPF</label>
           <input type="text" placeholder="digite seu cpf" name="cpf" maxLength="11" value={values.cpf} onChange={handleInput} onBlur={handleCpfVerificar} id="cpf" autoComplete="off"/>
-          {errors.cpf && <span className='res'>{errors.cpf}</span>}
+          {cpfJaCadastrado && <div className="res">CPF já cadastrado. Redirecionando para login...</div>}
         </div>
 
         <div className="formbox">
@@ -386,38 +435,38 @@ useEffect(() => {
           </select>
         </div>
 
-        <div className="formbox">
-          <label htmlFor="autoDeclaracao">Auto declaração</label>
-          <select name="autoDeclaracao" value={values.raca} onChange={handleChange}>
-            <option value="branca">branca</option>
-            <option value="indigina">indígena</option>
-            <option value="preta">preta</option>
-            <option value="parda">parda</option>
-            <option value="amarela">amarela</option>
-          </select>
-        </div>
+          <div className="formbox">
+            <label htmlFor="autoDeclaracao">Auto declaração</label>
+            <select name="raca" value={values.raca} onChange={handleChange}>
+              <option value="branca">branca</option>
+              <option value="indigena">indígena</option>
+              <option value="preta">preta</option>
+              <option value="parda">parda</option>
+              <option value="amarela">amarela</option>
+            </select>
+          </div>
 
-        <div className="formbox">
-          <label htmlFor="possuiFilhos">Possui filhos?</label>
-          <select name="possuiFilhos" value={values.filhos} onChange={handleChange}>
-            <option value="nenhum">nenhum</option>
-            <option value="um">um</option>
-            <option value="dois">dois</option>
-            <option value="tres">três</option>
-            <option value="mais de tres">mais de três</option>
-          </select>
-        </div>
+          <div className="formbox">
+            <label htmlFor="possuiFilhos">Possui filhos?</label>
+            <select name="filhos" value={values.filhos} onChange={handleChange}>
+              <option value="nenhum">nenhum</option>
+              <option value="um">um</option>
+              <option value="dois">dois</option>
+              <option value="tres">três</option>
+              <option value="mais de tres">mais de três</option>
+            </select>
+          </div>
 
-        <div className="formbox">
-          <label htmlFor="atividadeFuncao">Atividade/Função</label>
-          <select name="atividadeFuncao" value={values.profissao} onChange={handleChange} >
-            <option value="empregado">empregado</option>
-            <option value="desempregado">desempregado</option>
-            <option value="autonomo">autônomo</option>
-            <option value="estudante">estudante</option>
-            <option value="aposentado">aposentado</option>
-          </select>
-        </div>
+          <div className="formbox">
+            <label htmlFor="atividadeFuncao">Atividade/Função</label>
+            <select name="profissao" value={values.profissao} onChange={handleChange}>
+              <option value="empregado">empregado</option>
+              <option value="desempregado">desempregado</option>
+              <option value="autonomo">autônomo</option>
+              <option value="estudante">estudante</option>
+              <option value="aposentado">aposentado</option>
+            </select>
+          </div>
 
         <input type="submit" id="enviar" value="Cadastrar" />
       </form>
@@ -427,5 +476,3 @@ useEffect(() => {
     </section>
   );
 };
-
-
